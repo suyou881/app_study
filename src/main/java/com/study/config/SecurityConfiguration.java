@@ -16,7 +16,7 @@ import javax.sql.DataSource;
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
-public class SecurityConfig {
+public class SecurityConfiguration {
 
     private final AccountService accountService;
     private final DataSource dataSource;
@@ -28,7 +28,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.authorizeHttpRequests()
-                .requestMatchers("/", "/login", "/sign-up", "/check-email", "/check-email-token",
+                .requestMatchers("/","/ex", "/login", "/sign-up", "/check-email", "/check-email-token",
                                 "/email-login", "/check-email-login", "login-link", "/profile/*").permitAll()
                    //get이든 post든 상관없이
                    .requestMatchers(HttpMethod.GET, "/profile/*").permitAll()
@@ -44,11 +44,13 @@ public class SecurityConfig {
                    .and().build();
     }
 
+    //Don't know how to access to static resources
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return (web) -> web.ignoring()
                            .requestMatchers("/node_modules/**")
-                           .requestMatchers(PathRequest.toStaticResources().atCommonLocations());
+                           .requestMatchers(PathRequest.toStaticResources().atCommonLocations())
+                .requestMatchers("/images/**", "/static");
     }
 
 
